@@ -53,20 +53,35 @@ export const actions = {
     let lastId = context.state.items[context.state.items.length - 1].id
     item.id = lastId + 1
     item.comleted = false
-    context.commit(mutationTypes.setItems, {
-      items: [...context.state.items, item],
-    })
+
+    todoApi
+      .addItem(item)
+      .then(() => {
+        context.commit(mutationTypes.setItems, {
+          items: [...context.state.items, item],
+        })
+      })
+      .catch(() => console.log('smth went wrong'))
   },
   [actionTypes.toggleCompleted](context, {id}) {
-    let item = context.state.items.map((item) => {
-      if (item.id == id) return item
-    })
+    /*let item = context.state.items.filter((item) => {
+      return item.id == id
+    })*/
 
+    let item = context.state.items.find((item) => item.id == id)
+
+    console.log(item)
+    //item = item[0]
     item.completed = !item.completed
-    context.commit(mutationTypes.updateItem, {item})
+
+    todoApi
+      .updateItem(item)
+      .then(() => context.commit(mutationTypes.updateItem, {item}))
   },
   [actionTypes.updateItem](context, {item}) {
-    context.commit(mutationTypes.updateItem, {item})
+    todoApi
+      .updateItem(item)
+      .then(() => context.commit(mutationTypes.updateItem, {item}))
   },
   [actionTypes.setCategory](context, {category}) {
     context.commit(mutationTypes.setCategory, {category})
