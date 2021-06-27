@@ -1,42 +1,42 @@
 import todoApi from '@/api/todo'
 
 const state = {
-  /*  items: [
-    {
-      id: 0,
-      title: 'test1',
-      description: 'desc 1',
-      completed: false,
-    },
-    {
-      id: 1,
-      title: 'test2',
-      description: 'desc 2',
-      completed: false,
-    },
-    {
-      id: 2,
-      title: 'test3',
-      description: 'desc 3',
-      completed: false,
-    },
-  ],*/
   items: [],
+  currentCategory: 'all',
 }
 
 export const mutationTypes = {
   setItems: '[todo] Set todo list items',
+  updateItem: '[todo] Update item',
+  setEditItem: '[todo] Set edit item',
+  setCategory: '[todo] Set category',
 }
 
 export const actionTypes = {
   setItems: '[todo] Set todo list items',
   loadItems: '[todo] Load todo list items',
   addItem: '[todo] Add item',
+  toggleCompleted: '[todo] Toggle item complement',
+  setEditItem: '[todo] Set edit item',
+  updateItem: '[todo] Update item',
+  setCategory: '[todo] Set category',
 }
 
 export const mutations = {
   [mutationTypes.setItems](state, payload) {
     state.items = payload.items
+  },
+  [mutationTypes.updateItem](state, payload) {
+    state.items = state.items.map((item) => {
+      if (item.id == payload.item.id) item = payload.item
+      return item
+    })
+  },
+  [mutationTypes.setEditItem](state, payload) {
+    state.editItem = payload.item
+  },
+  [mutationTypes.setCategory](state, payload) {
+    state.currentCategory = payload.category
   },
 }
 
@@ -51,14 +51,40 @@ export const actions = {
   },
   [actionTypes.addItem](context, {item}) {
     let lastId = context.state.items[context.state.items.length - 1].id
-    console.log(lastId)
     item.id = lastId + 1
-    console.log(item.id)
     item.comleted = false
-    //context.state.items.push(item)
     context.commit(mutationTypes.setItems, {
       items: [...context.state.items, item],
     })
+  },
+  [actionTypes.toggleCompleted](context, {id}) {
+    let item = context.state.items.map((item) => {
+      if (item.id == id) return item
+    })
+
+    item.completed = !item.completed
+    context.commit(mutationTypes.updateItem, {item})
+  },
+  [actionTypes.updateItem](context, {item}) {
+    context.commit(mutationTypes.updateItem, {item})
+  },
+  [actionTypes.setCategory](context, {category}) {
+    context.commit(mutationTypes.setCategory, {category})
+  },
+}
+
+const getters = {
+  getCurrentCategory: (state) => state.currentCategory,
+  getItemsByCategory: (state) => {
+    if (state.currentCategory === 'all') return state.items
+    else if (state.currentCategory === 'completed')
+      return state.items.filter((item) => {
+        return item.completed
+      })
+    else if (state.currentCategory === 'incomplete')
+      return state.items.filter((item) => {
+        return !item.completed
+      })
   },
 }
 
@@ -66,4 +92,5 @@ export default {
   state,
   actions,
   mutations,
+  getters,
 }

@@ -1,5 +1,5 @@
 <template>
-  <b-row>
+  <b-row class="mb-4">
     <b-button v-if="!isAdding" @click="toggleAdding">add new item</b-button>
     <b-form v-else>
       <b-form-group id="title" label="Title:" label-for="title">
@@ -49,6 +49,7 @@ export default {
       this.$store.dispatch(actionTypes.addItem, {item: {...this.todo}})
       this.todo.title = ''
       this.todo.description = ''
+      this.isAdding = false
     },
     toggleAdding: function () {
       this.isAdding = !this.isAdding
