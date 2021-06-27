@@ -1,11 +1,12 @@
 from flask import Flask
 from flask import jsonify
 from flask import request
+from flask import render_template
 from flask_cors import CORS
 
 DEBUG = True
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="./public", static_folder="./public/static",)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -38,7 +39,7 @@ items_data = [
 ]
 
 
-@app.route("/items/<int:item_id>", methods=['PATCH'])
+@app.route("/api/items/<int:item_id>", methods=['PATCH'])
 def item_update(item_id):
     data = request.get_json()
     response = {'success': False}
@@ -50,7 +51,7 @@ def item_update(item_id):
     return jsonify(response)
 
 
-@app.route("/items", methods=['GET', 'POST', 'HEAD'])
+@app.route("/api/items", methods=['GET', 'POST', 'HEAD'])
 def items():
 
     if request.method == 'POST':
@@ -61,3 +62,12 @@ def items():
         response = jsonify(items_data)
         response.headers.add("Access-Control-Allow-Origin", "*")
         return response
+
+
+@app.route('/')
+def home():
+    return render_template("index.html")
+
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0')

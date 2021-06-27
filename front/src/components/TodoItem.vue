@@ -5,7 +5,7 @@
         :class="['todo-item__title', {completed: itemData.completed}]"
         @click="expand"
       >
-        {{ itemData.title }}
+        {{ itemData.title }}<sub>[click to view description]</sub>
       </div>
       <div class="todo-item__description" v-if="isExpanded">
         {{ itemData.description }}
@@ -45,13 +45,14 @@ export default {
   },
   data() {
     return {
-      itemData: this.item,
+      itemData: {...this.item},
       isEdit: false,
       isExpanded: false,
     }
   },
   methods: {
     toggleComplete: function () {
+      console.log(this.itemData.id)
       this.$store.dispatch(actionTypes.toggleCompleted, {id: this.itemData.id})
     },
     expand: function () {

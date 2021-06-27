@@ -64,14 +64,8 @@ export const actions = {
       .catch(() => console.log('smth went wrong'))
   },
   [actionTypes.toggleCompleted](context, {id}) {
-    /*let item = context.state.items.filter((item) => {
-      return item.id == id
-    })*/
-
     let item = context.state.items.find((item) => item.id == id)
 
-    console.log(item)
-    //item = item[0]
     item.completed = !item.completed
 
     todoApi
