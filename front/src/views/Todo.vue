@@ -26,9 +26,6 @@ export default {
     }
   },
   computed: {
-    /*...mapState({
-      items: (state) => state.todo.items,
-    }),*/
     ...mapGetters({
       items: 'getItemsByCategory',
     }),
