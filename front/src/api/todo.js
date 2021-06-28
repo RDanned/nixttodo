@@ -6,7 +6,7 @@ const addItem = (data) =>
   axios.post('/items', data).then((response) => response.data)
 
 const updateItem = (item) =>
-  axios.patch(`/items/${item.id}`, item).then((response) => response.data)
+  axios.put(`/items/${item.id}`, item).then((response) => response.data)
 
 export default {
   getItems,

@@ -52,7 +52,6 @@ export default {
   },
   methods: {
     toggleComplete: function () {
-      console.log(this.itemData.id)
       this.$store.dispatch(actionTypes.toggleCompleted, {id: this.itemData.id})
     },
     expand: function () {

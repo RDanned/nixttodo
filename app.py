@@ -39,7 +39,7 @@ items_data = [
 ]
 
 
-@app.route("/api/items/<int:item_id>", methods=['PATCH'])
+@app.route("/api/items/<int:item_id>", methods=['PUT'])
 def item_update(item_id):
     data = request.get_json()
     response = {'success': False}
